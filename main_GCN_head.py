@@ -61,7 +61,7 @@ class val_GCN(nn.Module):
                                    num_layers_p=config.layer_p,
                                    num_f_maps_p=config.out_channel_p, 
                                    dropout_r= config.dropout,).to(device)
-            model_path = 'best_PNet_epoch.pth'
+            model_path = 'last_PNet_epoch.pth'
             model.load_state_dict(torch.load(model_path))
             model.eval()
             
