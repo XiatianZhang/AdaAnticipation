@@ -7,6 +7,7 @@ At present, only the inference code and sample datasets are available. Comprehen
 # Overview
 
 # Usage
+python main.py
 
 # Contact
 For any queries, please feel free to contact Xiatian Zhang at Xiatian.Zhang@durham.ac.uk
