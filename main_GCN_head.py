@@ -127,8 +127,7 @@ class val_GCN(nn.Module):
                 with torch.no_grad():
                     # feed data
 
-                    tmp_output_feature, tmp_output_stg_RSD, tmp_output_tool_stg_RSD, tmp_output_RSD, _, _, out_stem_tool_policy, out_stem_phase_policy = model(
-                        data, bb)
+                    tmp_output_feature, tmp_output_stg_RSD, tmp_output_tool_stg_RSD, tmp_output_RSD, _, _, out_stem_tool_policy, out_stem_phase_policy = self.infer_one_clip(model, data, bb)
                     
                 
                     # save out_stem_policy
@@ -485,3 +484,26 @@ class val_GCN(nn.Module):
 
 
 
+    def infer_one_clip(self, model, data, bb):
+        clip_length = bb.size(1)
+        f = 0
+        for t in range(clip_length):
+            with torch.no_grad():
+                tmp_output_feature, tmp_output_stg_RSD, tmp_output_tool_stg_RSD, tmp_output_RSD, _, _, out_stem_tool_policy, out_stem_phase_policy = model(data, bb[:, :t + 1, :, :])
+                tmp_RSD = tmp_output_RSD
+            f += 1
+            if t == 0:
+                output_stg_RSD = tmp_output_stg_RSD[:, t:t + 1, :]
+                output_tool_stg_RSD = tmp_output_tool_stg_RSD[:, t:t + 1, :]
+                output_RSD = 0
+                tool_action = [out_stem_tool_policy]
+                phase_action = [out_stem_phase_policy]
+
+            else:
+                output_stg_RSD = torch.cat((output_stg_RSD, tmp_output_stg_RSD[:, t:t + 1, :]), dim=1)
+                output_tool_stg_RSD = torch.cat((output_tool_stg_RSD, tmp_output_tool_stg_RSD[:, t:t + 1, :]), dim=1)
+                output_RSD = 0
+                tool_action.append(tool_action)
+                phase_action.append(phase_action)
+
+        return tmp_output_feature, output_stg_RSD, output_tool_stg_RSD, output_RSD, _, _, tool_action, phase_action
