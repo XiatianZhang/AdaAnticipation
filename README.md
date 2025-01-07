@@ -1,4 +1,7 @@
-Notice: This repository is no longer under maintenance. For updated code, please visit: https://github.com/FrancisXZhang/AdaAnticipation
+# ⚠️ Notice
+
+**This repository is no longer under maintenance.**  
+For updated code, please visit: [AdaAnticipation GitHub Repository](https://github.com/FrancisXZhang/AdaAnticipation)
 
 # AdaAnticipation
 
